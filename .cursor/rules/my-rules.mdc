@@ -1,0 +1,1062 @@
+# Cursor Rules for Next.js Template Project
+
+## 🚀 Project Overview
+
+This is a modern Next.js 15 template project with TypeScript, featuring:
+
+- **Frontend**: React 19, Next.js 15 with App Router, HeroUI components, Tailwind CSS
+- **Backend**: Next.js API routes, Prisma ORM, PostgreSQL database
+- **Authentication**: NextAuth.js v5 (beta)
+- **State Management**: React Hook Form with Zod validation
+- **File Upload**: Custom image upload with compression
+- **Styling**: Tailwind CSS with custom design system
+- **Typography**: Athiti font for Thai language
+- **Language**: Thai language support throughout the application
+- **Notifications**: HeroUI Toast system for user feedback
+
+## 📁 Project Structure & File Organization
+
+### Core Directory Structure
+
+```
+src/
+├── app/                    # Next.js App Router directory
+│   ├── (authentication)/   # Auth route group
+│   ├── (frontend)/        # Frontend route group
+│   ├── api/               # API routes
+│   ├── auth/              # Auth pages
+│   └── globals.css        # Global styles
+├── client/                # Client-side code
+│   ├── actions/           # Client actions
+│   ├── components/        # React components
+│   │   ├── auth/          # Authentication components
+│   │   │   ├── forms/     # Auth form components
+│   │   │   ├── layout/    # Auth layout components
+│   │   │   └── shared/    # Shared auth components
+│   │   ├── common/        # Common UI components
+│   │   ├── layout/        # Layout components
+│   │   ├── pages/         # Page-specific components
+│   │   │   └── admin/     # Admin page components
+│   │   └── ui/            # Reusable UI components
+│   ├── contexts/          # React contexts
+│   ├── helpers/           # Client utilities
+│   ├── hooks/             # Custom hooks
+│   │   ├── auth/          # Authentication hooks
+│   │   ├── data/          # Data fetching hooks
+│   │   ├── ui/            # UI-related hooks
+│   │   └── utils/         # Utility hooks
+│   ├── lib/               # Client libraries
+│   └── providers/         # Context providers
+├── server/                # Server-side code
+│   ├── actions/           # Server actions
+│   ├── config/            # Server configuration
+│   ├── controllers/       # API controllers
+│   ├── fetches/           # Data fetching utilities
+│   ├── helpers/           # Server utilities
+│   ├── lib/               # Server libraries
+│   └── models/            # Database models
+├── schemas/               # Zod validation schemas
+│   ├── client/            # Client-side schemas
+│   └── server/            # Server-side schemas
+├── shared/                # Shared utilities
+└── types/                 # TypeScript type definitions
+```
+
+## 🎯 Coding Standards & Best Practices
+
+### TypeScript Guidelines
+
+- Use strict TypeScript configuration
+- Always define explicit types for function parameters and return values
+- Use interfaces for object shapes, types for unions/primitives
+- Prefer `type` for union types and `interface` for object definitions
+- Use proper generic constraints where applicable
+- Export types alongside their corresponding values
+
+### React Component Guidelines
+
+- Use functional components with hooks
+- Always use "use client" directive for client components
+- Keep components small and focused (single responsibility)
+- Use proper prop typing with TypeScript interfaces
+- Implement proper error boundaries
+- Use React.memo() for performance optimization when needed
+
+### File Naming Conventions
+
+- Components: PascalCase (e.g., `UserProfile.tsx`)
+- Hooks: camelCase starting with "use" (e.g., `useImageUpload.ts`)
+- Utilities: camelCase (e.g., `imageUtils.ts`)
+- Types: camelCase with .ts extension (e.g., `user.ts`)
+- Schemas: kebab-case with suffix (e.g., `auth-schema.ts`)
+- Actions: kebab-case with suffix (e.g., `user-action.ts`)
+
+### Import Organization
+
+Use the following import order:
+
+1. React and Next.js imports
+2. Third-party libraries
+3. UI component libraries (@heroui/react, @heroicons/react)
+4. Internal components and utilities (using path aliases)
+5. Type-only imports (use `import type`)
+
+Example:
+
+```typescript
+import { useEffect, useState } from "react";
+
+import { NextPage } from "next";
+
+import { CustomComponent } from "@/client/components/CustomComponent";
+import { UserService } from "@/server/services/user-service";
+import type { User } from "@/types/user";
+import { UserIcon } from "@heroicons/react/24/outline";
+import { Button, Card } from "@heroui/react";
+```
+
+## 🛠 Component Architecture
+
+### Client Components Structure
+
+```typescript
+"use client";
+
+import { ComponentProps } from "react";
+import { Button } from "@heroui/react";
+import { useToast } from "@/client/hooks/ui/useToast";
+
+interface ComponentNameProps {
+  // Props definition
+}
+
+export const ComponentName = ({ ...props }: ComponentNameProps) => {
+  const { success, error, warning, info } = useToast();
+
+  // Component logic
+  return (
+    <div>
+      {/* JSX */}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+### Server Components Structure
+
+```typescript
+import { ComponentProps } from "react";
+import { serverAction } from "@/server/actions/server-action";
+
+interface ComponentNameProps {
+  // Props definition
+}
+
+export const ComponentName = async ({ ...props }: ComponentNameProps) => {
+  // Server-side logic
+  const data = await serverAction();
+
+  return (
+    <div>
+      {/* JSX */}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+### Custom Hooks Pattern
+
+```typescript
+import { useCallback, useState } from "react";
+
+import { useToast } from "@/client/hooks/ui/useToast";
+
+export interface UseCustomHookReturn {
+  // Return type definition
+}
+
+export const useCustomHook = (): UseCustomHookReturn => {
+  const { success, error } = useToast();
+
+  // Hook logic
+  return {
+    // Hook return values
+  };
+};
+```
+
+## 🔐 Authentication & Authorization
+
+### NextAuth.js v5 Configuration
+
+- Use the beta version (5.0.0-beta.25)
+- Implement proper session handling
+- Use proper TypeScript augmentation for session types
+- Follow the established auth patterns in `src/auth.ts`
+
+### Protected Routes
+
+- Use `ProtectedRoute` component wrapper
+- Implement proper role-based access control
+- Check authentication status in server components when needed
+
+## 📊 Database & Schema Management
+
+### Prisma Guidelines
+
+- Use proper Prisma schema definitions
+- Implement proper relationships between models
+- Use enums for status/role fields
+- Follow the established naming conventions (camelCase for fields)
+- Always use transactions for multiple related operations
+
+### Schema Validation
+
+- Use Zod for all form validation
+- **Separate client and server schemas** in different directories:
+  - `@/schemas/client/` - Form validation schemas with detailed error messages
+  - `@/schemas/server/` - API/Database validation schemas
+- Include Thai language error messages in client schemas
+- Implement proper schema refinements for complex validation
+
+Example Client Schema (forms):
+
+```typescript
+// src/schemas/client/user-schema.ts
+import { z } from "zod";
+
+export const CreateUserFormSchema = z
+  .object({
+    firstName: z.string().min(2, "ชื่อต้องมีอย่างน้อย 2 ตัวอักษร"),
+    lastName: z.string().min(2, "นามสกุลต้องมีอย่างน้อย 2 ตัวอักษร"),
+    email: z.string().email("รูปแบบอีเมลไม่ถูกต้อง"),
+    password: z.string().min(6, "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร"),
+    confirmPassword: z.string().min(6, "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "รหัสผ่านไม่ตรงกัน",
+        path: ["confirmPassword"],
+      });
+    }
+  });
+
+export type CreateUserFormSchema = z.infer<typeof CreateUserFormSchema>;
+```
+
+Example Server Schema (API/DB operations):
+
+```typescript
+// src/schemas/server/user-schema.ts
+import { z } from "zod";
+
+export const CreateUserSchema = z.object({
+  firstName: z.string().min(2).max(50),
+  lastName: z.string().min(2).max(50),
+  email: z.string().email(),
+  phoneNumber: z.string().optional(),
+  password: z.string().min(6),
+  role: z.enum(["admin", "user", "moderator"]).default("user"),
+  status: z.enum(["active", "inactive", "suspended"]).default("active"),
+});
+
+export type CreateUserSchema = z.infer<typeof CreateUserSchema>;
+```
+
+## 🎨 UI/UX Guidelines
+
+### HeroUI Component Usage
+
+- Use HeroUI components consistently throughout the application
+- Follow the established design patterns
+- Implement proper responsive design
+- Use the custom color scheme and theme consistently
+
+### Styling Guidelines
+
+- Use Tailwind CSS for all styling
+- Follow mobile-first responsive design
+- Use the established spacing and color system
+- Implement proper dark/light mode support if needed
+
+### Typography Guidelines
+
+- **Primary Font**: Athiti for Thai text (`.font-athiti`)
+- **Font Weights**: 200 (Extra Light) to 700 (Bold)
+- **Usage**: Apply `.font-athiti` class to Thai text containers
+- **Responsive**: Font sizes scale appropriately on different devices
+
+### Tailwind CSS v4 Guidelines
+
+#### Configuration Structure
+
+**No `tailwind.config.ts`** - Configuration is now in CSS:
+
+```css
+/* src/app/globals.css */
+@import "tailwindcss";
+@plugin './hero.ts';
+@plugin "tailwindcss-debug-screens";
+
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #1e293b;
+  --secondary: #981417;
+  --font-athiti: "Athiti", sans-serif;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-athiti);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  --color-secondary-50: #f0fdf4;
+  --color-secondary-100: #dcfce7;
+  --color-secondary-200: #bbf7d0;
+  --color-secondary-300: #86efac;
+  --color-secondary-400: #4ade80;
+  --color-secondary-500: #22c55e;
+  --color-secondary-600: #16a34a;
+  --color-secondary-700: #15803d;
+  --color-secondary-800: #166534;
+  --color-secondary-900: #14532d;
+
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+  --color-accent-800: #92400e;
+  --color-accent-900: #78350f;
+
+  --font-family-athiti: var(--font-athiti);
+
+  --animation-fade-in: fadeIn 0.5s ease-in-out;
+  --animation-slide-up: slideUp 0.3s ease-out;
+  --animation-slide-down: slideDown 0.3s ease-out;
+}
+```
+
+#### PostCSS Configuration
+
+```javascript
+// postcss.config.mjs
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {}, // ✅ Correct for v4
+    autoprefixer: {},
+  },
+};
+```
+
+#### Key Differences from v3
+
+1. **No `tailwind.config.ts`** - Configuration is now in CSS
+2. **`@theme` directive** - Replaces `theme.extend` in config
+3. **CSS Variables** - Colors and other values are defined as CSS custom properties
+4. **`@import "tailwindcss"`** - New import syntax
+5. **`@plugin` directive** - Plugin loading in CSS
+6. **`@source` directive** - Source file inclusion
+
+#### Customization
+
+**Adding Custom Colors:**
+
+```css
+@theme {
+  --color-custom-50: #f0f9ff;
+  --color-custom-100: #dbeafe;
+  --color-custom-500: #0ea5e9;
+  --color-custom-900: #0c4a6e;
+}
+```
+
+**Adding Custom Fonts:**
+
+```css
+@theme {
+  --font-family-custom: "Your Custom Font", sans-serif;
+}
+```
+
+**Adding Custom Animations:**
+
+```css
+@theme {
+  --animation-bounce: bounce 1s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+```
+
+#### VS Code Setup
+
+```json
+{
+  "tailwindCSS.experimental.configFile": "src/app/globals.css",
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  }
+}
+```
+
+#### Troubleshooting
+
+**PostCSS Plugin Error:**
+
+```bash
+Error: It looks like you're trying to use `tailwindcss` directly as a PostCSS plugin
+```
+
+**Solution**: Use `@tailwindcss/postcss` instead of `tailwindcss`:
+
+```javascript
+// postcss.config.mjs
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {}, // ✅ Correct
+    // "tailwindcss": {},       // ❌ Wrong
+    autoprefixer: {},
+  },
+};
+```
+
+### Icon Usage
+
+- Use Heroicons for all icons
+- Prefer outline variants for most use cases
+- Use solid variants for filled states
+- Maintain consistent icon sizes (24px standard)
+
+## 🔄 State Management
+
+### Form State Management
+
+- Use React Hook Form for all forms
+- Implement proper form validation with Zod
+- Use controlled components pattern
+- Handle form errors gracefully with Thai messages
+
+### Server State Management
+
+- Use Next.js built-in caching where appropriate
+- Implement proper error handling for server actions
+- Use proper loading states
+- Implement optimistic updates when appropriate
+
+## 📁 File Upload Guidelines
+
+### Image Upload Implementation
+
+- Use the established `useImageUpload` hook
+- Implement proper image compression
+- Validate file types and sizes
+- Handle upload progress and errors
+- Support multiple upload types (car, user-proof, etc.)
+
+## 🌐 Server-Side Architecture Patterns
+
+### Primary Approach: Server Actions with Controllers
+
+**เมื่อไม่จำเป็นต้องใช้ API routes ให้ใช้ Server Actions แทน** - เหมาะสำหรับ:
+
+- Form submissions
+- Database operations
+- Data mutations
+- Server-side validations
+
+### Server Actions Pattern
+
+```typescript
+"use server";
+
+import { revalidatePath } from "next/cache";
+
+import { auth } from "@/auth";
+import { UserController } from "@/server/controllers/user-controller";
+
+export async function createUserAction(formData: FormData) {
+  const session = await auth();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    // ใช้ Controller pattern สำหรับ business logic
+    const result = await UserController.createUser({
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+    });
+
+    revalidatePath("/users");
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+}
+```
+
+### Controller Pattern
+
+```typescript
+// src/server/controllers/user-controller.ts
+import { prisma } from "@/server/lib/prisma";
+import { CreateUserData, UpdateUserData } from "@/types/user";
+
+export class UserController {
+  static async createUser(data: CreateUserData) {
+    return await prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        // ... other fields
+      },
+    });
+  }
+
+  static async updateUser(id: string, data: UpdateUserData) {
+    return await prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
+  static async deleteUser(id: string) {
+    return await prisma.user.delete({
+      where: { id },
+    });
+  }
+}
+```
+
+### API Routes (เฉพาะเมื่อจำเป็น)
+
+ใช้ API routes เฉพาะในกรณี:
+
+- External API integrations
+- Webhooks
+- Third-party service callbacks
+- Public APIs
+
+```typescript
+import { NextRequest, NextResponse } from "next/server";
+
+import { auth } from "@/auth";
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // API logic here
+
+    return NextResponse.json({ data: result });
+  } catch (error) {
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
+```
+
+## 🔔 Toast Notification Guidelines
+
+### useToast Hook Usage
+
+**ทุกไฟล์ที่มีการจัดการ form, actions, หรือ error handling ต้องใช้ useToast**
+
+```typescript
+import { useToast } from "@/client/hooks/ui/useToast";
+
+export const MyComponent = () => {
+  const { success, error, warning, info } = useToast();
+
+  const handleSubmit = async () => {
+    try {
+      // ... operation
+      success({ description: "บันทึกข้อมูลสำเร็จ" });
+    } catch (err) {
+      error({ description: "เกิดข้อผิดพลาดในการบันทึก" });
+    }
+  };
+
+  return (
+    // ... JSX
+  );
+};
+```
+
+### Toast Types and Usage
+
+- **Success**: เมื่อ operation สำเร็จ
+- **Error**: เมื่อเกิดข้อผิดพลาด
+- **Warning**: เมื่อมีข้อมูลไม่ถูกต้อง
+- **Info**: เมื่อแสดงข้อมูลทั่วไป
+
+### Available Hooks
+
+- `useToast()` - สำหรับ toast notifications
+- `useAsyncOperation()` - สำหรับ async operations พร้อม toast
+- `useAuth()` - สำหรับ authentication
+- `useImageUpload()` - สำหรับ image upload
+- `useUsers()` - สำหรับ data fetching
+
+## 🚨 Error Handling System Guidelines
+
+### Server Actions Error Handling
+
+**ทุก server action ต้องใช้ withErrorHandler wrapper**
+
+```typescript
+"use server";
+
+import { withErrorHandler } from "@/server/helpers/error-handler";
+import { ServerActionResponse } from "@/types/error";
+
+export async function createUserAction(data: CreateUserFormSchema): Promise<ServerActionResponse<{ message: string }>> {
+  return withErrorHandler(async () => {
+    const user = await createUserController(data);
+    revalidatePath("/users");
+    return { message: "User created successfully" };
+  });
+}
+```
+
+### Controllers Error Handling
+
+**ใช้ createError สำหรับ custom business logic errors**
+
+```typescript
+import { createError } from "@/server/helpers/error-handler";
+
+export async function createUser(data: CreateUserSchema) {
+  const existingUser = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
+
+  if (existingUser) {
+    throw createError("CONFLICT_ERROR", "User with this email already exists", "DUPLICATE_EMAIL", { field: "email" });
+  }
+
+  // Continue with user creation...
+}
+```
+
+### Client Components Error Handling
+
+**ใช้ useServerAction หรือ useFormServerAction hooks**
+
+```typescript
+"use client";
+
+import { useFormServerAction } from "@/client/hooks/utils/useServerAction";
+import { createUserAction } from "@/server/actions/user-action";
+
+export const UserForm = () => {
+  const { submitForm, isLoading, error } = useFormServerAction({
+    showSuccessToast: true,
+    showErrorToast: true,
+    successMessage: "ผู้ใช้งานถูกสร้างเรียบร้อยแล้ว",
+  });
+
+  const handleSubmit = async (formData: FormData) => {
+    await submitForm(() => createUserAction(formData), (result) => {
+      console.log("User created:", result);
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Form fields */}
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? "กำลังสร้าง..." : "สร้างผู้ใช้งาน"}
+      </button>
+    </form>
+  );
+};
+```
+
+### Error Types and Usage
+
+- **VALIDATION_ERROR**: Zod validation failed (Toast: Warning)
+- **DATABASE_ERROR**: Prisma database operations failed (Toast: Danger)
+- **AUTHENTICATION_ERROR**: User authentication failed (Toast: Danger)
+- **AUTHORIZATION_ERROR**: User lacks required permissions (Toast: Danger)
+- **NOT_FOUND_ERROR**: Requested resource not found (Toast: Warning)
+- **CONFLICT_ERROR**: Resource conflict (e.g., duplicate entry) (Toast: Warning)
+- **NETWORK_ERROR**: Network connectivity issues (Toast: Danger)
+- **UNKNOWN_ERROR**: Unexpected errors (Toast: Danger)
+
+### Multi-language Error Messages
+
+**ระบบรองรับการแสดงข้อความ error ในหลายภาษา**
+
+```typescript
+const { showError } = useToast();
+
+// แสดง error ในภาษาไทย
+await showError(error, { locale: "th" });
+
+// แสดง error ในภาษาอังกฤษ
+await showError(error, { locale: "en" });
+```
+
+### Error Handling Best Practices
+
+1. **ใช้ withErrorHandler เสมอ** สำหรับ server actions
+2. **ใช้ createError** สำหรับ custom business logic errors
+3. **ใช้ useServerAction hooks** สำหรับ client components
+4. **ใช้ localized messages** แทน hardcoded error messages
+5. **Log errors** สำหรับ debugging ใน development mode
+6. **ไม่ expose sensitive information** ใน error messages
+
+### Available Error Handling Hooks
+
+- `useServerAction()` - สำหรับ server actions พร้อม error handling
+- `useFormServerAction()` - สำหรับ form submissions พร้อม error handling
+- `useToast().showError()` - สำหรับแสดง localized error messages
+- `useToast().showServerError()` - สำหรับแสดง server action errors
+
+## 🧪 Testing Guidelines
+
+### Component Testing
+
+- Test user interactions and behavior
+- Mock external dependencies
+- Test error states and edge cases
+- Use proper TypeScript types in tests
+
+### API Testing
+
+- Test authentication and authorization
+- Test input validation
+- Test error handling
+- Test database operations
+
+## 📊 Performance Guidelines
+
+### Code Splitting
+
+- Use dynamic imports for large components
+- Implement proper lazy loading
+- Split vendor bundles appropriately
+
+### Image Optimization
+
+- Use Next.js Image component
+- Implement proper image compression
+- Use appropriate image formats
+- Implement lazy loading for images
+
+### Database Optimization
+
+- Use proper indexing
+- Implement query optimization
+- Use connection pooling
+- Implement proper caching strategies
+
+## 🔍 Error Handling
+
+### Client-side Error Handling
+
+- Use proper error boundaries
+- Display user-friendly error messages in Thai
+- Log errors appropriately
+- Implement proper fallback UI
+
+### Server-side Error Handling
+
+- Use proper try-catch blocks
+- Return appropriate HTTP status codes
+- Log errors for debugging
+- Don't expose sensitive information
+
+## 🌍 Internationalization
+
+### Thai Language Support
+
+- Use Thai language for all user-facing text
+- Implement proper form validation messages in Thai
+- Use appropriate date/time formatting for Thai locale
+- Consider RTL support if needed
+
+### Messages Structure Guidelines
+
+**ทุกไฟล์ messages ต้องแยก sections ตามประเภทการใช้งาน**
+
+#### Structure Pattern:
+
+```json
+{
+  "section": {
+    "description": "คำอธิบายของ section",
+    "table": {
+      "title": "หัวข้อตาราง",
+      "columns": { "name": "ชื่อคอลัมน์" },
+      "filters": { "all": "ทั้งหมด" },
+      "pagination": { "showPerPage": "แสดงต่อหน้า" }
+    },
+    "forms": {
+      "create": {
+        "title": "หัวข้อฟอร์ม",
+        "placeholders": { "name": "placeholder" },
+        "submit": "ปุ่มส่ง"
+      },
+      "edit": {
+        /* similar structure */
+      },
+      "validation": { "required": "ข้อความ validation" }
+    },
+    "modals": {
+      "delete": {
+        "title": "หัวข้อ modal",
+        "message": "ข้อความ",
+        "confirm": "ยืนยัน",
+        "cancel": "ยกเลิก"
+      }
+    },
+    "actions": {
+      "create": {
+        "success": "ข้อความสำเร็จ",
+        "error": "ข้อความผิดพลาด"
+      }
+    }
+  }
+}
+```
+
+#### Required Sections:
+
+- **`table`** - สำหรับตารางแสดงข้อมูล
+- **`forms`** - สำหรับฟอร์มสร้างและแก้ไข
+- **`modals`** - สำหรับ modal ยืนยันและรายละเอียด
+- **`actions`** - สำหรับการดำเนินการต่างๆ
+
+#### Naming Conventions:
+
+- ใช้ camelCase สำหรับ keys
+- ใช้ snake_case สำหรับ nested objects
+- ใช้ descriptive names ที่ชัดเจน
+- แยก placeholders, validation, และ actions ออกจากกัน
+
+#### Usage Examples:
+
+```typescript
+// ✅ Good - ใช้ sections ที่แยกชัดเจน
+dict.admin.users.table.title;
+dict.admin.users.forms.create.title;
+dict.admin.users.modals.delete.confirm;
+dict.admin.users.actions.create.success;
+
+// ❌ Bad - ใช้ flat structure
+dict.admin.users.title;
+dict.admin.users.createTitle;
+dict.admin.users.deleteConfirm;
+```
+
+## 📱 Responsive Design
+
+### Breakpoint Strategy
+
+- Mobile-first approach
+- Use Tailwind CSS breakpoints consistently
+- Test on multiple device sizes
+- Implement proper touch targets
+
+## 🔧 Development Guidelines
+
+### Environment Configuration
+
+- Use proper environment variables
+- Separate development and production configs
+- Implement proper secrets management
+- Use the established `.env.example` as reference
+
+### Code Quality
+
+- Follow ESLint configuration
+- Use Prettier for code formatting
+- Implement proper commit message conventions
+- Use proper branching strategy
+
+## 📋 Additional Best Practices
+
+1. **Path Aliases**: Always use the configured path aliases (@/, @/app/, @/client/, @/server/, @/shared/, @/schemas/, @/types/)
+
+2. **Server Actions First**: ใช้ Server Actions แทน API routes เมื่อไม่จำเป็น - เหมาะสำหรับการจัดการ forms และ database operations
+
+3. **Controller Pattern**: แยก business logic ไปยัง Controllers เพื่อความเป็นระเบียบและสามารถนำมาใช้ซ้ำได้
+
+4. **Type Safety**: Maintain strict type safety throughout the application
+
+5. **Performance**: Use React.memo, useMemo, and useCallback judiciously
+
+6. **Accessibility**: Implement proper ARIA attributes and semantic HTML
+
+7. **Security**: Never expose sensitive data, validate all inputs, use proper authentication
+
+8. **Documentation**: Comment complex logic, maintain up-to-date README
+
+9. **Testing**: Write comprehensive tests for critical functionality
+
+10. **Monitoring**: Implement proper error tracking and performance monitoring
+
+11. **Toast Notifications**: ใช้ useToast แทน console.log, alert, หรือ error states ใน UI
+
+12. **Error Handling System**: ใช้ระบบ error handling ที่ครอบคลุมสำหรับ server actions และ controllers
+
+13. **Messages Structure**: แยก sections ใน messages ตามประเภทการใช้งาน (table, forms, modals, actions)
+
+14. **Component Organization**: แยก components ตาม functionality (forms, layout, shared, pages)
+
+15. **Hook Organization**: แยก hooks ตาม purpose (auth, data, ui, utils)
+
+## 🚨 CRITICAL: File Editing Rules
+
+### Messages Files Editing Rules
+
+**เมื่อแก้ไขไฟล์ messages (th.json, en.json) ต้องปฏิบัติตามกฎต่อไปนี้:**
+
+1. **NEVER use edit_file tool for messages files** - ใช้ search_replace แทน
+2. **ALWAYS read the entire file first** - ใช้ read_file เพื่อดูโครงสร้างปัจจุบัน
+3. **Use search_replace with exact context** - ต้องมี context อย่างน้อย 5 บรรทัดก่อนและหลัง
+4. **Make only ONE change per tool call** - ห้ามแก้ไขหลายส่วนพร้อมกัน
+5. **Verify JSON syntax after each change** - ตรวจสอบว่า JSON ยังถูกต้อง
+6. **If linter error occurs, STOP and reassess** - ห้ามพยายามแก้ไขซ้ำๆ
+
+### Example of CORRECT approach:
+
+```typescript
+// 1. Read current file first
+read_file("messages/th.json", true, 1, 300);
+
+// 2. Use search_replace with exact context
+search_replace(
+  "messages/th.json",
+  `    "errors": {
+        "notFound": "ไม่พบหน้าเว็บ",
+        "unauthorized": "ไม่มีสิทธิ์เข้าถึง"
+    },
+    "carBrands": {`,
+  `    "errors": {
+        "notFound": "ไม่พบหน้าเว็บ",
+        "unauthorized": "ไม่มีสิทธิ์เข้าถึง"
+    },
+    "carBrands": {
+        "title": "ยี่ห้อรถ",
+        "table": {
+            "ariaLabel": "ตารางยี่ห้อรถ",
+            "columns": {
+                "name": "ชื่อแบรนด์",
+                "createdAt": "วันที่สร้าง",
+                "actions": "การดำเนินการ"
+            }
+        }
+    },`
+);
+```
+
+### Example of WRONG approach:
+
+```typescript
+// ❌ DON'T DO THIS - Using edit_file with partial content
+edit_file("messages/th.json", "เพิ่ม carBrands section", `"carBrands": {...}`);
+
+// ❌ DON'T DO THIS - Multiple changes at once
+edit_file("messages/th.json", "แก้ไขหลายส่วน", `"section1": {...}, "section2": {...}`);
+```
+
+### Loop Prevention Rules
+
+1. **Maximum 3 attempts per file** - หากแก้ไขไม่สำเร็จ 3 ครั้ง ให้หยุดและขอความช่วยเหลือ
+2. **Always verify before proceeding** - ตรวจสอบว่าไฟล์ถูกต้องก่อนทำการแก้ไขต่อไป
+3. **Use git status to check changes** - ใช้ git status เพื่อดูการเปลี่ยนแปลง
+4. **If stuck, revert and start over** - หากติด ให้ revert และเริ่มใหม่
+
+## 🎯 Code Review Checklist
+
+Before submitting code, ensure:
+
+- [ ] TypeScript compilation passes without errors
+- [ ] ESLint passes without warnings
+- [ ] Prettier formatting is applied
+- [ ] All imports use proper path aliases
+- [ ] Components follow established patterns
+- [ ] Error handling is implemented with proper error handling system
+- [ ] Thai language is used for user-facing text
+- [ ] Messages follow structured sections (table, forms, modals, actions)
+- [ ] Responsive design is implemented
+- [ ] Performance considerations are addressed
+- [ ] Security best practices are followed
+- [ ] Toast notifications are used appropriately
+
+---
+
+## 📝 Notes for AI Assistants
+
+When working with this codebase:
+
+1. **Architecture Priority**: ใช้ Server Actions + Controllers แทน API routes เมื่อไม่จำเป็น
+2. **Error Handling Priority**: ใช้ withErrorHandler และ createError สำหรับ server actions และ controllers
+3. **Messages Structure Priority**: แยก sections ใน messages ตามประเภทการใช้งาน
+4. **Toast Notifications**: ใช้ useToast แทน console.log หรือ alert
+5. **Component Organization**: แยก components ตาม functionality
+6. **No Index Files**: ไม่ใช้ index.ts files สำหรับ export - import โดยตรงจากไฟล์ที่ต้องการ
+7. **File Editing Rules**: ใช้ search_replace สำหรับ messages files, ห้ามใช้ edit_file
+8. **Loop Prevention**: หยุดหลังจาก 3 ครั้งที่แก้ไม่สำเร็จ
+9. Always respect the established architecture patterns
+10. Use the existing components and hooks before creating new ones
+11. Follow the Thai language convention for user-facing text
+12. Maintain consistency with the existing code style
+13. Consider the full-stack implications of changes
+14. Test changes thoroughly across different scenarios
+15. Update documentation when making architectural changes
+
+16. Always respect the established architecture patterns
+17. Use the existing components and hooks before creating new ones
+18. Follow the Thai language convention for user-facing text
+19. Maintain consistency with the existing code style
+20. Consider the full-stack implications of changes
+21. Test changes thoroughly across different scenarios
+22. Update documentation when making architectural changes
+    alwaysApply: true
+
+---

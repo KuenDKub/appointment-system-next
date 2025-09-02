@@ -1,0 +1,25 @@
+export enum ErrorType {
+  VALIDATION = "VALIDATION",
+  AUTHENTICATION = "AUTHENTICATION",
+  AUTHORIZATION = "AUTHORIZATION",
+  NOT_FOUND = "NOT_FOUND",
+  CONFLICT = "CONFLICT",
+  INTERNAL = "INTERNAL",
+}
+
+export enum ErrorCode {
+  INVALID_INPUT = "INVALID_INPUT",
+  UNAUTHORIZED = "UNAUTHORIZED",
+  FORBIDDEN = "FORBIDDEN",
+  RESOURCE_NOT_FOUND = "RESOURCE_NOT_FOUND",
+  DUPLICATE_ENTRY = "DUPLICATE_ENTRY",
+  DATABASE_ERROR = "DATABASE_ERROR",
+  UNKNOWN_ERROR = "UNKNOWN_ERROR",
+}
+
+export interface ErrorResponse {
+  type: ErrorType;
+  code: ErrorCode;
+  message: string;
+  details?: Record<string, any>;
+}
